@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit bootstrap="vendor/autoload.php">
-    <php>
-        <env name="PHOENIX_MYSQL_HOST" value="localhost"/>
-        <env name="PHOENIX_MYSQL_USERNAME" value="root"/>
-        <env name="PHOENIX_MYSQL_PASSWORD" value=""/>
-        <env name="PHOENIX_MYSQL_DATABASE" value="phoenix"/>
-        <env name="PHOENIX_MYSQL_CHARSET" value="utf8mb4"/>
-        <env name="PHOENIX_MYSQL_COLLATE" value="utf8mb4_general_ci"/>
-    </php>
-    <testsuites>
-        <testsuite name="Test suite">
-            <directory>tests/</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src/</directory>
-        </whitelist>
-    </filter>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">src/</directory>
+    </include>
+  </coverage>
+  <php>
+    <env name="PHOENIX_MYSQL_HOST" value="localhost"/>
+    <env name="PHOENIX_MYSQL_USERNAME" value="root"/>
+    <env name="PHOENIX_MYSQL_PASSWORD" value=""/>
+    <env name="PHOENIX_MYSQL_DATABASE" value="phoenix"/>
+    <env name="PHOENIX_MYSQL_CHARSET" value="utf8mb4"/>
+    <env name="PHOENIX_MYSQL_COLLATE" value="utf8mb4_general_ci"/>
+  </php>
+  <testsuites>
+    <testsuite name="Test suite">
+      <directory>tests/</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>

@@ -1,0 +1,37 @@
+{
+    "name": "efabrica/phoenix-mysql",
+    "type": "library",
+    "description": "MySQL adapter for Phoenix database migrations",
+    "keywords": [
+        "PHP",
+        "Database",
+        "Migrations",
+        "PDO",
+        "MySQL"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "efabrica/phoenix-core": "^4.0",
+        "efabrica/phoenix-pdo": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5.11",
+        "ramsey/uuid": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Phoenix\\": "src/"
+        },
+        "files": [
+            "src/bootstrap.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Phoenix\\Tests\\": "tests/"
+        }
+    }
+}

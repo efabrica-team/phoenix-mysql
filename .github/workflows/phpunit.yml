@@ -1,0 +1,62 @@
+name: PHPunit
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: null
+
+jobs:
+  phpunit:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '8.4', '8.5', '8.6' ]
+        # official images: https://hub.docker.com/_/mysql (5.7 is EOL but still common, 8.4 is the current LTS)
+        mysql: [ '5.7', '8.0', '8.4', '9' ]
+        dependencies: [ 'highest' ]
+        include:
+          - php: '8.4'
+            mysql: '8.4'
+            dependencies: 'lowest'
+          - php: '8.5'
+            mysql: '8.4'
+            dependencies: 'lowest'
+          - php: '8.6'
+            mysql: '8.4'
+            dependencies: 'lowest'
+
+    name: PHPunit - PHP ${{ matrix.php }}, MySQL ${{ matrix.mysql }}, ${{ matrix.dependencies }} dependencies
+
+    services:
+      mysql:
+        image: mysql:${{ matrix.mysql }}
+        env:
+          MYSQL_ROOT_PASSWORD: 123
+        ports:
+          - 3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -p123"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+
+      - name: Composer update
+        run: composer update --no-progress --no-interaction ${{ matrix.dependencies == 'lowest' && '--prefer-lowest' || '' }}
+
+      - name: PHPunit
+        run: vendor/bin/phpunit --coverage-text
+        env:
+          PHOENIX_MYSQL_HOST: 127.0.0.1
+          PHOENIX_MYSQL_PORT: ${{ job.services.mysql.ports[3306] }}
+          PHOENIX_MYSQL_PASSWORD: 123

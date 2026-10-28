@@ -62,6 +62,19 @@ final class MysqlAdapter extends PdoAdapter
         return $tables;
     }
 
+    protected function loadViews(string $database): array
+    {
+        /** @var array<array<string, string>> $views */
+        $views = $this->query(sprintf("
+            SELECT TABLE_NAME AS view_name
+            FROM
+                information_schema.VIEWS
+            WHERE
+                TABLE_SCHEMA = '%s'
+            ORDER BY TABLE_NAME", $database))->fetchAll();
+        return array_map(fn(array $view): string => $view['view_name'], $views);
+    }
+
     protected function createMigrationTable(array $table): MigrationTable
     {
         $migrationTable = parent::createMigrationTable($table);
